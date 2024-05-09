@@ -544,6 +544,9 @@ class HFLM(TemplateLM):
                 trust_remote_code=trust_remote_code,
                 **model_kwargs,
             )
+            eval_logger.debug("==============================")
+            eval_logger.info(f"Loaded {pretrained}")
+            eval_logger.debug(f"Model dtype: {self._model.dtype}")
         else:
             try:
                 from auto_gptq import AutoGPTQForCausalLM
