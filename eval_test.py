@@ -51,5 +51,12 @@ for tok, score in zip(generated_tokens[0], transition_scores[0]):
 print(f"Trailing log probability: {total_log_prob.cpu().numpy():.4f}")
 
 # logprobs for arbitrary tokens
-model(input_ids=inputs, labels=inputs, return_dict=True).loss
+o = model(input_ids=inputs, labels=inputs, return_dict=True)
 
+logprobs = torch.log_softmax(o.logits, dim=-1)
+torch.gather(logprobs, -1, inputs[None,:,:])
+
+def get_logprobs(input_ids, model):
+    o = model(input_ids=input_ids, labels=input_ids, return_dict=True)
+    logprobs = torch.log_softmax(o.logits, dim=-1)
+    return torch.gather(logprobs, -1, input_ids[None,:,:])
